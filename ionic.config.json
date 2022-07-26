@@ -1,0 +1,8 @@
+{
+  "name": "SmartScale",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "e2ed0661"
+}
