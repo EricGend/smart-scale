@@ -20,6 +20,4 @@ export class ScaleModeComponent implements OnInit {
   addPlusOne(): number {
     return this.bleComponent.weight;
   }
-
-
 }

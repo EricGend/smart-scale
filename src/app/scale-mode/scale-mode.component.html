@@ -1,10 +1,12 @@
 <div id="container">
   <strong>{{ name }}</strong>
-  <p>DONT Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  <h2>{{ "addPlusOne()" }}</h2>
+  <p>DONT daExplore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  <h2 >{{ bleComponent.weight }}</h2>
+  <h2></h2>
   <ion-fab  horizontal="center" slot="fixed">
     <ion-fab-button (click)="addPlusOne()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+  <app-bluetooth-low-energy></app-bluetooth-low-energy>
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChange, SimpleChanges, Input } from '@angular/core';
 
 import { BleClient, numbersToDataView, numberToUUID } from '@capacitor-community/bluetooth-le';
 @Component({
@@ -6,11 +6,16 @@ import { BleClient, numbersToDataView, numberToUUID } from '@capacitor-community
   templateUrl: './bluetooth-low-energy.component.html',
   styleUrls: ['./bluetooth-low-energy.component.scss'],
 })
-export class BluetoothLowEnergyComponent implements OnInit {
+export class BluetoothLowEnergyComponent implements OnInit, OnChanges {
 
-  weight : number =123456
+  @Input() weight : number;
   constructor() { }
-
+  
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes);  
+  }
+ 
+  
   async ngOnInit() {
     await BleClient.initialize({ androidNeverForLocation: true });
   }
@@ -61,18 +66,13 @@ export class BluetoothLowEnergyComponent implements OnInit {
     console.log(`device ${deviceId} disconnected`);
   }
   
-  parseWeight(value: DataView): number {
-    
+  parseWeight(value: DataView): number {    
     const flags = value.getUint8(0);
-    let heartRate: number;
     try{
-      heartRate = value.getInt32(0, true);
-      console.log("1 Current VALUE: ");
-      console.log(String(heartRate));
+      this.weight = value.getInt32(0, true);
     }catch(error){
       console.error(error);
     }
-    this.weight = heartRate;
-    return heartRate;
+    return this.weight;
   }
 }
