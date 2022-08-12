@@ -1,0 +1,17 @@
+%----------------------%
+% 				Glossar					%
+%----------------------%
+
+\newglossaryentry{Test}
+{
+    name=Test,
+    plural=Tests,
+    description={Testeintrag zum Test der Glossar-Funkion.}
+}
+
+\newglossaryentry{Anthropologie}
+{
+	name=Anthropologie,
+	%plural=•,
+	description={Wissenschaft vom Menschen und seiner Entwicklung \cite{Duden}}
+}

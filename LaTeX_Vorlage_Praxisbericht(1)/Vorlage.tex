@@ -1,0 +1,111 @@
+\documentclass[a4paper,12pt]{article}
+
+%	---------------------------------	%
+%				Titelseite				%
+%	---------------------------------	%
+
+% in die entsprechenden Variablen den Inhalt für die Titelseite eintragen
+
+\newcommand{\Studiengang}{Master Informatik
+	 
+	Modul: Hardware cyber-physischer Systeme}
+\newcommand{\Dokumentenart}{Dokumentation}
+\newcommand{\Dokumententitel}{Technische Dokumentation Smarte Küchenwaage}
+\newcommand{\Autorenname}{Eric Gendner}
+\newcommand{\Abgabedatum}{\today}
+\newcommand{\Betreuer}{Prof. Dr. Matthias Mörz}
+
+% Variablen für Titelseite des Praxisbericht
+
+\newcommand{\DatumBeginn}{15.03.2022}
+\newcommand{\DatumEnde}{\Abgabedatum}
+\newcommand{\DatumAbgabe}{\Abgabedatum}
+
+%	---------------------------------	%
+%		allgemeine Einstellungen			%
+%	---------------------------------	%
+
+\include{Dateien/Allgemein/Einstellungen}
+
+
+%	---------------------------------	%
+%			Abkürzungsverzeichnis		%
+%	---------------------------------	%
+
+\include{Dateien/Verzeichnisse/Abkuerzungsverzeichnis}
+
+%	---------------------------------	%
+%			Beginn des Dokuments			%
+%	---------------------------------	%
+
+\begin{document}
+
+% Symbolverzeichnis
+\include{Dateien/Verzeichnisse/Symbolverzeichnis}
+
+% Worttrennungen
+\include{Dateien/Allgemein/Worttrennungen}
+
+% Titelseite auswählen
+%\include{Dateien/Allgemein/Titelseite}
+\include{Dateien/Allgemein/Titelseite_Praxisbericht}
+
+\include{Dateien/Allgemein/Einstellungen_Verzeichnisse}
+
+%	---------------------------------	%
+%			 	Inhalt					%
+%	---------------------------------	%
+
+
+\include{Dateien/Text/Einfuehrung}
+ 
+
+%	---------------------------------	%
+%		Literaturverzeichnis				%
+%	---------------------------------	%
+
+% Literaturverzeichnis soll im Inhaltsverzeichnis auftauchen
+\newpage
+\addcontentsline{toc}{section}{Literaturverzeichnis}
+
+% Literaturverzeichnis anzeigen
+\renewcommand\refname{Literaturverzeichnis}
+\bibliography{Literatur/Literatur}
+
+
+%	---------------------------------	%
+%			 Glossar					%
+%	---------------------------------	%
+
+% Glossar ausgeben
+\newpage
+%\renewcommand*{\glspostdescription}
+
+% alle Einträge im Glossar ausgeben
+\setglossarystyle{altlist}
+%\glsaddall % alle Einträge, egal ob verwendet oder nicht verwendet anzeigen
+\printglossary
+\include{Dateien/Verzeichnisse/Glossar}
+
+
+%	---------------------------------	%
+%			 	Anhang					%
+%	---------------------------------	%
+
+\newpage
+\fancyhead[L]{Anhang} %Kopfzeile links
+\include{Dateien/Anhang/Anhang}
+
+
+%	---------------------------------	%
+%		Ehrenwörtliche Erklärung			%
+%	---------------------------------	%
+
+\newpage
+\addcontentsline{toc}{section}{Ehrenwörtliche Erklärung}
+\fancyhead[L]{Ehrenwörtliche Erklärung} %Kopfzeile links
+\include{Dateien/Allgemein/ehrenwoertliche_Erklaerung}
+
+
+
+\end{document}

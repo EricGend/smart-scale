@@ -1,0 +1,53 @@
+% Inhaltsverzeichnis
+\newpage
+\fancyhead[L]{Inhaltsverzeichnis} %Kopfzeile links
+\tableofcontents
+
+% Abbildungsverzeichnis
+\newpage
+\fancyhead[L]{Abbildungsverzeichnis} %Kopfzeile links
+
+% Abbildungsverzeichnis soll im Inhaltsverzeichnis auftauchen
+\addcontentsline{toc}{section}{Abbildungsverzeichnis}
+
+\renewcommand{\cftfigpresnum}{Abb. }
+\renewcommand{\cftfigaftersnum}{:}
+\setlength{\cftfignumwidth}{2cm}
+\setlength{\cftfigindent}{0cm}
+\listoffigures
+
+% Tabellenverzeichnis
+\newpage
+\fancyhead[L]{Tabellenverzeichnis} %Kopfzeile links
+
+% Tabellenverzeichnis soll im Inhaltsverzeichnis auftauchen
+\addcontentsline{toc}{section}{Tabellenverzeichnis}
+
+\renewcommand{\cfttabpresnum}{Tab. }
+\renewcommand{\cfttabaftersnum}{:}
+\setlength{\cfttabnumwidth}{2cm}
+\setlength{\cfttabindent}{0cm}
+\listoftables
+
+
+% Codebeispielverzeichnis
+\newpage
+
+% Listingverzeichnis soll im Inhaltsverzeichnis auftauchen
+\addcontentsline{toc}{section}{Codebeispielverzeichnis}
+
+\fancyhead[L]{Codebeispielverzeichnis} %Kopfzeile links
+\renewcommand{\lstlistlistingname}{Codebeispielverzeichnis}
+
+% Codeverzeichnis  endgueltig anzeigen
+\lstlistoflistings
+
+% das Abkürzungsverzeichnis
+\newpage
+\fancyhead[L]{Abkürzungsverzeichnis} %Kopfzeile links
+\setglossarystyle {super}
+\printglossary[type=\acronymtype,title=Abkürzungsverzeichnis]
+
+
+\newpage
+\fancyhead[L]{\nouppercase{\leftmark}} %Kopfzeile links

@@ -1,0 +1,5 @@
+\newacronym{zB}{z. B.}{zum Beispiel}
+\newacronym{PTC}{PTC}{Positive Temperature Coefficient}
+
+% Indexerstellung
+\makeindex

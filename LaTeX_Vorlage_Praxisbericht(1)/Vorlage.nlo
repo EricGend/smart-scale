@@ -1,0 +1,6 @@
+\nomenclatureentry{01\textbf{Symbol}@[{\textbf{Symbol}}]\begingroup \textbf{Bedeutung} \nomunit{\textbf{[phys. Einheit]}}\nomeqref {0.0}|nompageref}{1}
+\nomenclatureentry{a$i$@[{$i$}]\begingroup ganzzahlige Laufvariable\nomeqref {0.0}|nompageref}{1}
+\nomenclatureentry{a$n$@[{$n$}]\begingroup Umfang der Messreihe oder Stichprobe\nomeqref {0.0}|nompageref}{1}
+\nomenclatureentry{a$s$@[{$s$}]\begingroup empirische Standardabweichung \nomunit{[\si{\metre}]}\nomeqref {0.0}|nompageref}{1}
+\nomenclatureentry{a$\overline{x}$@[{$\overline{x}$}]\begingroup Mittelwert der Stichprobe \nomunit{[\si{\metre}]}\nomeqref {0.0}|nompageref}{1}
+\nomenclatureentry{a$x_i$@[{$x_i$}]\begingroup Einzelmesswert \nomunit{[\si{\metre}]}\nomeqref {0.0}|nompageref}{1}

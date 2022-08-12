@@ -1,0 +1,48 @@
+% Inhaltsverzeichnis
+\newpage
+\fancyhead[L]{Inhaltsverzeichnis}
+\tableofcontents
+
+% Abbildungsverzeichnis
+\newpage
+\addcontentsline{toc}{section}{Abbildungsverzeichnis}
+\fancyhead[L]{Abbildungsverzeichnis}
+\renewcommand{\cftfigpresnum}{Abb. }
+\renewcommand{\cftfigaftersnum}{:}
+\setlength{\cftfignumwidth}{2cm}
+\setlength{\cftfigindent}{0cm}
+\listoffigures
+
+% Tabellenverzeichnis
+\newpage
+\addcontentsline{toc}{section}{Tabellenverzeichnis}
+\fancyhead[L]{Tabellenverzeichnis}
+\renewcommand{\cfttabpresnum}{Tab. }
+\renewcommand{\cfttabaftersnum}{:}
+\setlength{\cfttabnumwidth}{2cm}
+\setlength{\cfttabindent}{0cm}
+\listoftables
+
+
+% Codebeispielverzeichnis
+\newpage
+\addcontentsline{toc}{section}{Codebeispielverzeichnis}
+\fancyhead[L]{Codebeispielverzeichnis}
+\renewcommand{\lstlistlistingname}{Codebeispielverzeichnis}
+\lstlistoflistings
+
+% Symbolverzeichnis
+\newpage
+\addcontentsline{toc}{section}{Symbolverzeichnis}
+\fancyhead[L]{Symbolverzeichnis}
+\renewcommand{\nomname}{Symbolverzeichnis}
+\printnomenclature[1in]
+
+% Abkürzungsverzeichnis
+\newpage
+\fancyhead[L]{Abkürzungsverzeichnis}
+\setglossarystyle{super}
+\printglossary[type=\acronymtype,title=Abkürzungsverzeichnis]
+
+\newpage
+\fancyhead[L]{\nouppercase{\leftmark}}

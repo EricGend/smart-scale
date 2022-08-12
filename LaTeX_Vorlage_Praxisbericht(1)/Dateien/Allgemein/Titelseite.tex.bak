@@ -1,0 +1,55 @@
+\newgeometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+
+\begin{titlepage}
+    \begin{center}
+    \includegraphics[width=\textwidth]{Bilder/Titelseite/Logo_HS_Coburg}
+        \begin{Large}
+        Hochschule für angewandte Wissenschaften Coburg
+        \\
+        Fakultät Elektrotechnik und Informatik
+        \par
+        \end{Large}
+        \vspace{1.5cm}
+        
+        \begin{Large}
+            Studiengang: Automatisierungstechnik und Robotik
+            \par
+        \end{Large}
+        \vspace{1.5cm}
+        
+        \begin{Large}
+        	Seminararbeit
+        \end{Large}
+        \vspace{1cm}
+        
+        \begin{Huge}
+        	\textbf{Anforderungen und Bedarf}
+        \end{Huge}
+        
+        \begin{Huge}
+        	\textbf{in der Pflegerobotik}
+        \end{Huge}
+        \vspace{2cm}
+        
+        \begin{huge}
+        	Patrick Eyring
+        \end{huge}
+        \vspace{2cm}
+        
+        \begin{Large}
+        	Abgabe der Arbeit: 25. Juli 2020
+        \end{Large}
+        
+        \begin{Large}
+        	Betreut durch:
+        \end{Large}
+        
+        \begin{Large}
+        	Prof. Dr.-Ing. habil. Kolja Kühnlenz, Hochschule Coburg
+        \end{Large}
+        
+	\end{center}
+    
+\end{titlepage}
+
+\restoregeometry

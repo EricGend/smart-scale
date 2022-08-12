@@ -1,0 +1,771 @@
+\appendix
+
+\section{Anhang}\label{anhang}
+
+
+\subsection{Skripte: Document Tracking List}
+
+\begin{lstlisting}[caption={generate\_compliance\_matrices}, label=lst: generate compliance matrices] 
+// execute when open file
+function onOpen() {
+
+  // call functions
+  wirteHistory();
+  distribution_list();
+  
+  // creats menu functions
+  var ui = SpreadsheetApp.getUi();
+  
+  ui.createMenu('functions')
+      .addItem('generate tracking list', 'gernerate_compliance_matrices')
+      .addToUi();
+}
+
+function gernerate_compliance_matrices() {
+  
+  var set_password = "Hyazinthenkolibris"; // set a password
+  
+  var password = Browser.inputBox("enter password"); // ask for password
+  
+  if(set_password == password){
+  
+    var sheet = SpreadsheetApp.getActive().getSheetByName("Tracking List"); // activate sheet tracking list
+  
+    var spec_folder = DriveApp.getFoldersByName("Specifications").next(); // get the Specification folder
+    var template_folder = DriveApp.getFoldersByName("templates").next(); // get the templates folder
+    var compliance_matrix_folder = DriveApp.getFoldersByName("Compliance_Matrices").next(); // get the CM folder
+    
+    var spec_files_iter = spec_folder.getFiles() // get the file iterator for the specifications
+    var template_file = template_folder.getFilesByName("E5_compliance_matrix_template").next(); // get CM template name
+   
+    var i = 3; // start to fill the table at row 3
+    
+    while(spec_files_iter.hasNext()){
+    
+      var file = spec_files_iter.next(); // file iterator
+      var filename = file.getName(); // get file name
+      var filelink = file.getUrl(); // get URL of file
+      
+      filename = filename.substring(0,filename.length-4); // cut off the document ending .png / .doc
+    
+      sheet.getRange(i, 1).setFormula('=HYPERLINK("'+filelink+'";"'+filename+'")'); // set link to specification
+  
+      template_file.makeCopy(filename, compliance_matrix_folder) // creates compliance matrix
+      
+      var file = compliance_matrix_folder.getFilesByName(filename).next(); // get compliance matrix iterator
+      
+      var filelink = file.getUrl(); // get URL of file
+      
+      sheet.getRange(i, 2).setFormula('=HYPERLINK("'+filelink+'";"'+filename+'")'); // set link zu compliance matrix
+      
+      // creating links
+      
+      var fileID = file.getId(); // get file ID
+      
+      // Valeo Status
+      sheet.getRange(i, 3).setFormula('=IMPORTRANGE("'+fileID+'";"Summary!C11")'); // Requirements
+      sheet.getRange(i, 4).setFormula('=IMPORTRANGE("'+fileID+'";"Summary!C12")'); // Accepted
+      sheet.getRange(i, 5).setFormula('=IMPORTRANGE("'+fileID+'";"Summary!C13")'); // Not Accepted
+      sheet.getRange(i, 6).setFormula('=IMPORTRANGE("'+fileID+'";"Summary!C14")'); // Accepted with Restrict
+      sheet.getRange(i, 7).setFormula('=IMPORTRANGE("'+fileID+'";"Summary!C15")'); // Clarification
+      sheet.getRange(i, 8).setFormula('=IMPORTRANGE("'+fileID+'";"Summary!C16")'); // n/a
+      sheet.getRange(i, 9).setFormula('=IMPORTRANGE("'+fileID+'";"Summary!C17")'); // Not Rated
+      
+      // Customer status
+      sheet.getRange(i, 10).setFormula('=IMPORTRANGE("'+fileID+'";"Summary!C24")'); // Valeo Proposal Accepted
+      sheet.getRange(i, 11).setFormula('=IMPORTRANGE("'+fileID+'";"Summary!C25")'); // Valeo Proposal Rejected
+      sheet.getRange(i, 12).setFormula('=IMPORTRANGE("'+fileID+'";"Summary!C26")'); // Under Discussion
+      sheet.getRange(i, 13).setFormula('=IMPORTRANGE("'+fileID+'";"Summary!C27")'); // Not Rated
+
+      i++;
+    }
+    
+    Browser.msgBox("Generated all compliance matrices!") // MassageBox when Skript ends
+  }
+  else{ 
+      Browser.msgBox("wrong password"); // MassageBox when password was incorrect
+  }
+
+}
+
+
+function wirteHistory() { 
+ 
+  // writes history
+  var sheet = SpreadsheetApp.getActive().getSheetByName("History"); // activate sheet History
+  
+  var timestamp=new Date(); // get actual timestamp
+ 
+  var timestamp_format="dd.mm.yyyy hh:mm:ss"; // format of the timestamp
+  
+  var last_row = sheet.getLastRow()+1; // gets next empty row
+  
+  var user = Session.getActiveUser() // get account of active user
+  
+  sheet.getRange(last_row, 1).setValue(timestamp).setNumberFormat(timestamp_format); // writes timestamp
+  sheet.getRange(last_row, 2).setValue(user) // writes user account
+ 
+}
+
+
+function distribution_list(){
+
+    // write all editors to Distribution List
+    
+    var sheet = SpreadsheetApp.getActive().getSheetByName("Distribution List"); // activate sheet Distribution List
+    var names = SpreadsheetApp.getActive().getEditors(); // get all editors in an array names[]
+    var i; // iterator
+    var row = 2; // row for distributor list
+    
+    // writes distibution list
+    for(i=0;i<=names.length-1;i++){
+    
+      sheet.getRange(row, 1).setValue(names[i]);
+      row++;
+    }
+}
+\end{lstlisting}
+
+\subsection{Skripte: Compliance Matrix}
+
+\begin{lstlisting}[caption={general functions}, label=lst: general functions] 
+function onOpen() {
+
+  // call functions
+  wirteHistory();
+  distribution_list();
+  
+  // create menu functions
+  var ui = SpreadsheetApp.getUi();
+  
+  ui.createMenu('functions')
+          .addItem('delete compliance matrix', 'deleteMatrix')
+          .addItem('structure document', 'StructureDocument')
+          .addItem('translate to English', 'TranslateToEnglish')
+          .addItem('translate to German', 'TranslateToGerman')
+      .addToUi();
+  
+  // change title on first page to filename
+  var sheetname = SpreadsheetApp.getActiveSpreadsheet().getName();
+  var sheet = SpreadsheetApp.getActive().getSheetByName("First Page");
+  sheet.getRange(1, 3).setValue(sheetname);
+      
+}
+
+ 
+function wirteHistory() { 
+ 
+  // write history
+  
+  var sheet = SpreadsheetApp.getActive().getSheetByName("History"); // activate sheet History
+  
+  var timestamp=new Date(); // get acutal timestamp
+ 
+  var timestamp_format="dd.mm.yyyy hh:mm:ss"; // format of the timestamp
+  
+  var last_row = sheet.getLastRow()+1; // get next empty row
+  
+  var user = Session.getActiveUser() // get account of active user
+  
+  sheet.getRange(last_row, 1).setValue(timestamp).setNumberFormat(timestamp_format); // write timestamp
+  sheet.getRange(last_row, 2).setValue(user) // write user account
+ 
+}
+ 
+
+
+function deleteMatrix() {
+  
+  // password
+  var password_set = "Supersinus" // set password
+  var password = Browser.inputBox('password'); // check password
+  
+  if(password == password_set){
+  
+    // activate sheet "Compliance Matrix"
+    var sheet = SpreadsheetApp.getActive().getSheetByName("Compliance Matrix");
+     
+    // number of headers
+    var NumberTitleCells = 1;
+     
+    // get last used row
+    var NumberCells = sheet.getLastRow();
+     
+    // delete all rows expect headers
+    sheet.deleteRows((NumberTitleCells + 1), NumberCells);
+    
+    // layout "Compliance Matrix"
+    sheet.getRange(2, 1, sheet.getMaxRows(), sheet.getMaxColumns()).activate();
+    sheet.getActiveRangeList().setBorder(true, true, true, true, true, true, '#000000', SpreadsheetApp.BorderStyle.SOLID)
+      .setFontFamily('Arial')
+      .setHorizontalAlignment('left')
+      .setVerticalAlignment('middle')
+      .setWrapStrategy(SpreadsheetApp.WrapStrategy.WRAP);   
+     
+    // activate sheet "History"
+    var sheet = SpreadsheetApp.getActive().getSheetByName("History");
+     
+    // number of heards
+    var NumberTitleCells = 1;
+     
+    // get last used row
+    var NumberCells = sheet.getLastRow();
+     
+    // delete all rows expect headers
+    sheet.deleteRows((NumberTitleCells + 1), NumberCells);
+
+  
+     // activate sheet "First Page"
+    var sheet = SpreadsheetApp.getActive().getSheetByName("First Page");
+    
+    // set "First Page" to default
+    sheet.getRange(8, 1).activate();
+    sheet.getActiveRangeList().clear({contentsOnly: true, skipFilteredRows: true});
+    sheet.getRange('B11:H16').activate();
+    sheet.getActiveRangeList().clear({contentsOnly: true, skipFilteredRows: true});
+    sheet.getRange('B20:H24').activate();
+    sheet.getActiveRangeList().clear({contentsOnly: true, skipFilteredRows: true});
+    sheet.getRange('C27:F45').activate();
+    sheet.getActiveRangeList().clear({contentsOnly: true, skipFilteredRows: true});
+   
+    Browser.msgBox('Compliance Matrix deleted!'); // massage skript ended
+    
+  }
+  else{
+  
+    Browser.msgBox('wrong password'); // massage wrong password
+    
+    }
+    
+}
+
+
+function StructureDocument(){
+  
+  // structure the document when it was bulid with copied data
+  
+  var sheet = SpreadsheetApp.getActive().getSheetByName("Compliance Matrix");
+  
+  // variables for drob-down-menu
+  var object = ['Undefined',  'Heading',  'Information',  'Req functional',  'Req non functional',  'DocInfo'];
+  var safety = ['Undefined', 'None', 'ASIL A', 'ASIL B', 'ASIL C', 'ASIL D', 'ASIL A (A)', 'ASIL A (D)',
+  'ASIL  B (D)', 'ASIL C (D)', 'QM (A)', 'QM (B)', 'QM (D)', 'CC-S', 'CC-R', 'CC-S/'];
+  var metier = ['Project', 'Mechanic', 'Simulation', 'NVH', 'Electric', 'Laboratory',
+  'Material', 'Quality', 'Industralisation'];
+  var valeo_status = ['Undefined', 'Accepted', 'Accepted with Restrict', 'Clarification', 'Not Accepted'];
+  var customer_status = ['Undefined', 'Valeo Proposal Accepted', 'Under Discussion', 'Valeo Proposal Rejected'];
+  var row = 1 // Laufvariable
+
+  
+  if(sheet.getName() == "Compliance Matrix")
+    {
+      var last_row = sheet.getLastRow();
+      
+      for(row=2;row<=last_row;row++){
+      
+          var column = 4; // column object type
+          
+          // if no content in text, block object type
+          if(sheet.getRange(row, 2).getValue() != "" || sheet.getRange(row, 3).getValue() != ""){
+           
+            // set drop-down-menu object type
+            sheet.getRange(row, 4).setDataValidation(SpreadsheetApp.newDataValidation()
+              .setAllowInvalid(false)
+              .requireValueInList(object, true)
+              .build());
+          }
+          else{
+            // Customer Comment
+            sheet.getRange(row, 4).setDataValidation(SpreadsheetApp.newDataValidation()
+              .setAllowInvalid(false)
+              .requireValueInList([], false)
+              .build());
+            
+            sheet.getRange(row, 4).clear({contentsOnly: true})
+          }
+          
+ 
+          if(sheet.getRange(row, column).getValue() == "Heading" || sheet.getRange(row, column).getValue() == "Information"
+          || sheet.getRange(row, column).getValue() == "DocInfo" || sheet.getRange(row, column).getValue() == ""){
+            
+            
+            // Safety
+            sheet.getRange(row, 6).setDataValidation(SpreadsheetApp.newDataValidation()
+              .setAllowInvalid(false)
+              .requireValueInList([], false)
+              .build());
+            
+            // Responsible Metier
+            sheet.getRange(row, 8).setDataValidation(SpreadsheetApp.newDataValidation()
+              .setAllowInvalid(false)
+              .requireValueInList([], false)
+              .build());
+            
+            // Valeo Status
+              sheet.getRange(row, 10).setDataValidation(SpreadsheetApp.newDataValidation()
+              .setAllowInvalid(false)
+              .requireValueInList([], false)
+              .build());
+            
+            // Valeo Justification / Counter proposal
+            sheet.getRange(row, 12).setDataValidation(SpreadsheetApp.newDataValidation()
+              .setAllowInvalid(false)
+              .requireValueInList([], false)
+              .build());
+              
+            // Customer Status
+            sheet.getRange(row, 14).setDataValidation(SpreadsheetApp.newDataValidation()
+              .setAllowInvalid(false)
+              .requireValueInList([], false)
+              .build());
+            
+            // Customer Comment
+            sheet.getRange(row, 15).setDataValidation(SpreadsheetApp.newDataValidation()
+              .setAllowInvalid(false)
+              .requireValueInList([], false)
+              .build());
+            
+            // delete content when not needed
+            sheet.getRange(row, 6).clear({contentsOnly: true})
+            sheet.getRange(row, 8).clear({contentsOnly: true})
+            sheet.getRange(row, 10).clear({contentsOnly: true})
+            sheet.getRange(row, 12).clear({contentsOnly: true})
+            sheet.getRange(row, 14).clear({contentsOnly: true})
+       
+          }
+          
+          // if type requirement was selected add additional drop down menus
+          else if(sheet.getRange(row, column).getValue() == "Req functional"
+          || sheet.getRange(row, column).getValue() == "Req non functional"){
+           
+            // Safety
+            sheet.getRange(row, 6).setDataValidation(SpreadsheetApp.newDataValidation()
+              .setAllowInvalid(false)
+              .requireValueInList(safety, true)
+              .build());
+            
+            // Responsible Metier
+            sheet.getRange(row, 8).setDataValidation(SpreadsheetApp.newDataValidation()
+              .setAllowInvalid(false)
+              .requireValueInList(metier, true)
+              .build());
+            
+            // Valeo Status
+            sheet.getRange(row, 10).setDataValidation(SpreadsheetApp.newDataValidation()
+              .setAllowInvalid(false)
+              .requireValueInList(valeo_status, true)
+              .build());
+            
+            // Valeo Justification / Counter proposal
+            sheet.getRange(row, 14).setDataValidation(SpreadsheetApp.newDataValidation()
+              .setAllowInvalid(false)
+              .requireValueInList(customer_status, true)
+              .build());
+          
+       }
+     }
+     
+     Browser.msgBox("Structured document!")
+  }
+}
+
+
+function TranslateToGerman(){
+  
+  var sheet = SpreadsheetApp.getActive().getSheetByName("First Page");
+  
+    sheet.getRange(5, 2).setValue("english");
+    
+    // translate english to german
+    
+    var sheet = SpreadsheetApp.getActive().getSheetByName("Compliance Matrix");
+  
+    var row = 1
+    var column_english = 3;
+    var column_german = 2;
+    
+    if(sheet.getName() == "Compliance Matrix")
+      {
+        var last_row = sheet.getLastRow();
+  
+        for(row=2;row<=last_row;row++){
+        
+        var text_english = sheet.getRange(row, column_english).getValue();
+        
+        if(text_english != ""){
+          var text_german = LanguageApp.translate(text_english, 'en', 'de')
+          
+          sheet.getRange(row, column_german).setValue(text_german)
+        }
+    }
+  }
+}
+
+
+function TranslateToEnglish(){
+  
+  var sheet = SpreadsheetApp.getActive().getSheetByName("First Page");
+
+    sheet.getRange(5, 2).setValue("german");
+    
+    // translate german to english
+    
+    var sheet = SpreadsheetApp.getActive().getSheetByName("Compliance Matrix");
+  
+    var row = 1 
+    var column_english = 3;
+    var column_german = 2;
+    
+    if(sheet.getName() == "Compliance Matrix")
+      {
+        var last_row = sheet.getLastRow();
+  
+        for(row=2;row<=last_row;row++){
+        
+        var text_german = sheet.getRange(row, column_german).getValue();
+        
+        if(text_german != ""){
+          var text_english = LanguageApp.translate(text_german, 'de', 'en')
+          
+          sheet.getRange(row, column_english).setValue(text_english)
+        }
+    }
+  }
+}
+
+
+
+function distribution_list(){
+
+    // write all editors to "First Page"
+    
+    var sheet = SpreadsheetApp.getActive().getSheetByName("First Page");
+    var names = SpreadsheetApp.getActive().getEditors(); // get all editors in an array names[]
+    var i;
+    var row = 27; // row for distributor list
+     
+    for(i=0;i<=names.length-1;i++){
+    
+      sheet.getRange(row, 3).setValue(names[i]);
+      row++;
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={functions onEdit}, label=lst: functions onEdit] 
+function onEdit(e)
+{
+
+  // execute functions on edit
+  
+  cmHistory();
+  type();
+  NewContent();
+  
+}
+
+function cmHistory()
+{
+    // writing editing history for each column in Compliance Matrix
+    
+    var sheet = SpreadsheetApp.getActive().getActiveSheet();
+    
+    // column headings
+    var object_type = 4
+    var safety = 6
+    var metier = 8
+    var valeo_status = 10
+    var valeo_comment = 12
+    var customer_status = 14
+    var customer_comment = 16
+    
+    // check if active sheet is Compliance Matrix
+    if(sheet.getName() == "Compliance Matrix")
+    {
+    
+      // Object Type
+      if(sheet.getActiveCell().getColumn() == object_type)
+      {
+        var timestamp = new Date();
+        var row = sheet.getActiveCell().getRow();
+        var user = Session.getActiveUser();
+        var temp = sheet.getRange(row, object_type+1).getValue();
+        var text = sheet.getRange(row, object_type).getValue();
+        
+        // append history
+        sheet.getRange(row, object_type+1).setValue(temp+"\n"+timestamp+" - "+user+": "+text);
+      }
+      
+      // Safety
+      if(sheet.getActiveCell().getColumn() == safety)
+      {
+        var timestamp = new Date();
+        var row = sheet.getActiveCell().getRow();
+        var user = Session.getActiveUser();
+        var temp = sheet.getRange(row, safety+1).getValue();
+        var text = sheet.getRange(row, safety).getValue();
+        
+        // append history
+        sheet.getRange(row, safety+1).setValue(temp+"\n"+timestamp+" - "+user+": "+text);
+      }
+      
+      // Responsibe Metier
+      if(sheet.getActiveCell().getColumn() == metier)
+      {
+        var timestamp = new Date();
+        var row = sheet.getActiveCell().getRow();
+        var user = Session.getActiveUser();
+        var temp = sheet.getRange(row, metier+1).getValue();
+        var text = sheet.getRange(row, metier).getValue();
+        
+        // append history
+        sheet.getRange(row, metier+1).setValue(temp+"\n"+timestamp+" - "+user+": "+text);
+      }
+      
+      // Valeo Status
+      if(sheet.getActiveCell().getColumn() == valeo_status)
+      {
+        var timestamp = new Date();
+        var row = sheet.getActiveCell().getRow();
+        var user = Session.getActiveUser();
+        var temp = sheet.getRange(row, valeo_status+1).getValue();
+        var text = sheet.getRange(row, valeo_status).getValue();
+        
+        // append history
+        sheet.getRange(row, valeo_status+1).setValue(temp+"\n"+timestamp+" - "+user+": "+text);;
+      }
+      
+      // Valeo Comment
+      if(sheet.getActiveCell().getColumn() == valeo_comment)
+      {
+        var timestamp = new Date();
+        var row = sheet.getActiveCell().getRow();
+        var user = Session.getActiveUser();
+        var temp = sheet.getRange(row, valeo_comment+1).getValue();
+        var text = sheet.getRange(row, valeo_comment).getValue();
+        
+        // append history
+        sheet.getRange(row, valeo_comment+1).setValue(temp+"\n"+timestamp+" - "+user+": "+text);
+      }
+      
+      // Customer / Supplier Comment
+      if(sheet.getActiveCell().getColumn() == customer_status)
+      {
+        var timestamp = new Date();
+        var row = sheet.getActiveCell().getRow();
+        var user = Session.getActiveUser();
+        var temp = sheet.getRange(row, customer_status+1).getValue();
+        var text = sheet.getRange(row, customer_status).getValue();
+        
+        // append history
+        sheet.getRange(row, customer_status+1).setValue(temp+"\n"+timestamp+" - "+user+": "+text);
+      }
+      
+      // Customer / Supplier Comment
+      if(sheet.getActiveCell().getColumn() == customer_comment)
+      {
+        var timestamp = new Date();
+        var row = sheet.getActiveCell().getRow();
+        var user = Session.getActiveUser();
+        var temp = sheet.getRange(row, customer_comment+1).getValue();
+        var text = sheet.getRange(row, customer_comment).getValue();
+        
+        // append history
+        sheet.getRange(row, customer_comment+1).setValue(temp+"\n"+timestamp+" - "+user+": "+text);
+      }
+   }
+}
+
+
+function type() {
+  
+  // format CM for: Heading, Information, DocInfo and empty
+  
+  var sheet = SpreadsheetApp.getActive().getSheetByName("Compliance Matrix");
+  
+  var user = Session.getEffectiveUser();
+  
+  // variables for drop down menus
+
+  var safety = ['Undefined', 'None', 'ASIL A', 'ASIL B', 'ASIL C', 'ASIL D', 'ASIL A (A)', 'ASIL A (D)',
+  'ASIL  B (D)', 'ASIL C (D)', 'QM (A)', 'QM (B)', 'QM (D)', 'CC-S', 'CC-R', 'CC-S/'];
+  var metier = ['Project', 'Mechanic', 'Simulation', 'NVH', 'Electric', 'Laboratory',
+  'Material', 'Quality', 'Industralisation'];
+  var valeo_status = ['n/a', 'Accepted', 'Accepted with Restrict', 'Clarification', 'Not Accepted'];
+  var customer_status = ['Valeo Proposal Accepted', 'Under Discussion', 'Valeo Proposal Rejected'];
+  
+
+  
+  if(sheet.getName() == "Compliance Matrix")
+    {
+
+      if(sheet.getActiveCell().getColumn() == 4){
+      
+         var row = sheet.getActiveCell().getRow();
+         
+        if(sheet.getActiveCell().getValue() == "Heading" || sheet.getActiveCell().getValue() == "Information"
+        || sheet.getActiveCell().getValue() == "DocInfo" || sheet.getActiveCell().getValue() == ""){
+          
+          // Safety
+          sheet.getRange(row, 6).setDataValidation(SpreadsheetApp.newDataValidation()
+            .setAllowInvalid(false)
+            .requireValueInList([], false)
+            .build());
+          
+          // Responsible Metier
+          sheet.getRange(row, 8).setDataValidation(SpreadsheetApp.newDataValidation()
+            .setAllowInvalid(false)
+            .requireValueInList([], false)
+            .build());
+          
+          // Valeo Status
+          sheet.getRange(row, 10).setDataValidation(SpreadsheetApp.newDataValidation()
+            .setAllowInvalid(false)
+            .requireValueInList([], false)
+            .build());
+          
+          // Valeo Justification / Counter proposal
+          sheet.getRange(row, 12).setDataValidation(SpreadsheetApp.newDataValidation()
+            .setAllowInvalid(false)
+            .requireValueInList([], false)
+            .build());
+          
+          // Customer Status
+          sheet.getRange(row, 14).setDataValidation(SpreadsheetApp.newDataValidation()
+            .setAllowInvalid(false)
+            .requireValueInList([], false)
+            .build());
+          
+          // Customer Comment
+          sheet.getRange(row, 15).setDataValidation(SpreadsheetApp.newDataValidation()
+            .setAllowInvalid(false)
+            .requireValueInList([], false)
+            .build());
+          
+          // clear not used columns
+          sheet.getRange(row, 6).clear({contentsOnly: true})
+          sheet.getRange(row, 8).clear({contentsOnly: true})
+          sheet.getRange(row, 10).clear({contentsOnly: true})
+          sheet.getRange(row, 12).clear({contentsOnly: true})
+          sheet.getRange(row, 14).clear({contentsOnly: true})
+     
+        }
+        else if(sheet.getActiveCell().getValue() == "Req functional"
+        || sheet.getActiveCell().getValue() == "Req non functional"){
+         
+           // Safety
+            sheet.getRange(row, 6).setDataValidation(SpreadsheetApp.newDataValidation()
+            .setAllowInvalid(false)
+            .requireValueInList(safety, true)
+            .build());
+          
+          // Responsible Metier
+          sheet.getRange(row, 8).setDataValidation(SpreadsheetApp.newDataValidation()
+            .setAllowInvalid(false)
+            .requireValueInList(metier, true)
+            .build());
+          
+          // Valeo Status
+          sheet.getRange(row, 10).setDataValidation(SpreadsheetApp.newDataValidation()
+            .setAllowInvalid(false)
+            .requireValueInList(valeo_status, true)
+            .build());
+          
+          // Valeo Justification / Counter proposal
+          sheet.getRange(row, 14).setDataValidation(SpreadsheetApp.newDataValidation()
+            .setAllowInvalid(false)
+            .requireValueInList(customer_status, true)
+            .build());
+        
+      }
+    }
+  }
+}
+
+
+function NewContent() {
+  
+  // format CM for new content
+  
+  var sheet = SpreadsheetApp.getActive().getSheetByName("Compliance Matrix");
+  
+  // variable for dorp down menu
+  var object = ['Undefined',  'Heading',  'Information',  'Req functional',  'Req non functional',  'DocInfo'];
+  
+  if(sheet.getName() == "Compliance Matrix")
+    {
+
+      if(sheet.getActiveCell().getColumn() == 2 || sheet.getActiveCell().getColumn() == 3){
+      
+         var row = sheet.getActiveCell().getRow();
+         
+        if(sheet.getRange(row, 2).getValue() != "" || sheet.getRange(row, 3).getValue() != ""){
+          
+          // Safety
+          sheet.getRange(row, 4).setDataValidation(SpreadsheetApp.newDataValidation()
+            .setAllowInvalid(false)
+            .requireValueInList(object, true)
+            .build());
+        }
+        else if(sheet.getRange(row, 2).getValue() == "" && sheet.getRange(row, 2).getValue() == ""){
+        
+          // Customer Comment
+          sheet.getRange(row, 4).setDataValidation(SpreadsheetApp.newDataValidation()
+            .setAllowInvalid(false)
+            .requireValueInList([], false)
+            .build());
+          
+          // Safety
+          sheet.getRange(row, 6).setDataValidation(SpreadsheetApp.newDataValidation()
+            .setAllowInvalid(false)
+            .requireValueInList([], false)
+            .build());
+          
+          // Responsible Metier
+          sheet.getRange(row, 8).setDataValidation(SpreadsheetApp.newDataValidation()
+            .setAllowInvalid(false)
+            .requireValueInList([], false)
+            .build());
+          
+          // Valeo Status
+          sheet.getRange(row, 10).setDataValidation(SpreadsheetApp.newDataValidation()
+            .setAllowInvalid(false)
+            .requireValueInList([], false)
+            .build());
+          
+          // Valeo Justification / Counter proposal
+          sheet.getRange(row, 12).setDataValidation(SpreadsheetApp.newDataValidation()
+            .setAllowInvalid(false)
+            .requireValueInList([], false)
+            .build());
+          
+          // Customer Status
+          sheet.getRange(row, 14).setDataValidation(SpreadsheetApp.newDataValidation()
+            .setAllowInvalid(false)
+            .requireValueInList([], false)
+            .build());
+          
+          // Customer Comment
+          sheet.getRange(row, 15).setDataValidation(SpreadsheetApp.newDataValidation()
+            .setAllowInvalid(false)
+            .requireValueInList([], false)
+            .build());
+          
+          // clear not used columns
+          sheet.getRange(row, 4).clear({contentsOnly: true})
+          sheet.getRange(row, 6).clear({contentsOnly: true})
+          sheet.getRange(row, 8).clear({contentsOnly: true})
+          sheet.getRange(row, 10).clear({contentsOnly: true})
+          sheet.getRange(row, 12).clear({contentsOnly: true})
+          sheet.getRange(row, 14).clear({contentsOnly: true})
+          
+      }
+    }
+  }
+}
+\end{lstlisting}
+
+
+%\includepdf[scale=0.8, pagecommand=\subsection{Preisliste ReqMan}]{PDF/ReqMAN/Preise.pdf}\label{ap: Preisliste ReqMan}
+
+%\includepdf[scale=0.8, pagecommand=\subsection{Angebot DOORS-Import for CDA}]{PDF/DOORS-Importfor_CDA/Angebot.pdf}\label{ap: Angebot DOORS-Import for CDA}

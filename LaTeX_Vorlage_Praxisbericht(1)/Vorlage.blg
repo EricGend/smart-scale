@@ -1,0 +1,59 @@
+This is BibTeX, Version 0.99d (TeX Live 2022/dev/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: Vorlage.aux
+The style file: alphadin.bst
+A level-1 auxiliary file: Dateien/Verzeichnisse/Symbolverzeichnis.aux
+A level-1 auxiliary file: Dateien/Allgemein/Worttrennungen.aux
+A level-1 auxiliary file: Dateien/Allgemein/Titelseite_Praxisbericht.aux
+A level-1 auxiliary file: Dateien/Allgemein/Einstellungen_Verzeichnisse.aux
+A level-1 auxiliary file: Dateien/Text/Einfuehrung.aux
+A level-1 auxiliary file: Dateien/Verzeichnisse/Glossar.aux
+A level-1 auxiliary file: Dateien/Anhang/Anhang.aux
+A level-1 auxiliary file: Dateien/Allgemein/ehrenwoertliche_Erklaerung.aux
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Database file #1: Literatur/Literatur.bib
+You've used 3 entries,
+            4793 wiz_defined-function locations,
+            918 strings with 7035 characters,
+and the built_in function-call counts, 1708 in all, are:
+= -- 178
+> -- 24
+< -- 54
++ -- 52
+- -- 7
+* -- 97
+:= -- 281
+add.period$ -- 3
+call.type$ -- 3
+change.case$ -- 12
+chr.to.int$ -- 3
+cite$ -- 3
+duplicate$ -- 50
+empty$ -- 134
+format.name$ -- 18
+if$ -- 347
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 14
+newline$ -- 28
+num.names$ -- 9
+pop$ -- 22
+preamble$ -- 1
+purify$ -- 18
+quote$ -- 0
+skip$ -- 93
+stack$ -- 0
+substring$ -- 153
+swap$ -- 8
+text.length$ -- 8
+text.prefix$ -- 3
+top$ -- 0
+type$ -- 22
+warning$ -- 0
+while$ -- 11
+width$ -- 4
+write$ -- 47

@@ -1,0 +1,57 @@
+\appendix
+
+\section{Anhang}
+
+Der Anhang bekommt automatisch eine eigene Überschrift. Hier nun noch ein Tipp für die Literaturarbeit mit \LaTeX\ .
+
+\subsection{Literaturverwaltungsprogramm}
+
+Neben \enquote{Citavi} und \enquote{Zotero} gibt es das Programm \enquote{JabRef} \footnote{\url{https://www.jabref.org}} speziell für \LaTeX\ . Es ist einProgramm um die Literatur sinnvoll und einfach zu verwalten mit dem Vorteil, dass es strukturierte .bib Dateien ausgibt. Auch diese Software ist kostenfrei und für Linux, MacOS und Windows verfügbar.
+
+\subsection{Titelseite}
+
+In der Präambel ist die Titelseite zu wählen (siehe Code \ref{code: Wahl der Titelseite}). Ausgewählt wird durch auskommentieren der nicht benötigten Datei.
+
+\begin{lstlisting}[caption={Wahl der Titelseite}, label=code: Wahl der Titelseite]
+% Titelseite auswaehlen
+\include{Dateien/Allgemein/Titelseite}
+%\include{Dateien/Allgemein/Titelseite_Praxisbericht}
+\end{lstlisting}
+
+Weiterhin sind alle Variablen mit Inhalt zu füllen (siehe Code \ref{code: Variablen Titelseite}).
+
+\begin{lstlisting}[caption={Variablen für Titelseite}, label=code: Variablen Titelseite]
+%-------------------------------%
+%	Titelseite		%
+%-------------------------------%
+
+% in Variablen den Inhalt fuer die Titelseite eintragen
+
+\newcommand{\Studiengang}{<Name des Studiengangs>}
+\newcommand{\Dokumentenart}{<Dokumentenart>}
+\newcommand{\Dokumententitel}{<Titel der Arbeit>}
+\newcommand{\Autorenname}{<Autorenname>}
+\newcommand{\Abgabedatum}{<Abgabedatum>}
+\newcommand{\Betreuer}{<Prof. Dr. Vorname Nachname>}
+
+% Variablen fuer Titelseite des Praxisbericht
+
+\newcommand{\UnternehmenName}{<Firma>}
+\newcommand{\UnternehmenAbteilung}{<Abteilung>}
+\newcommand{\UnternehmenStrasse}{<Strasse>}
+\newcommand{\UnternehmenOrt}{<PLZ Ort>}
+\newcommand{\UnternehmenBetreuer}{<Name des Betreuers>}
+\newcommand{\BetreuerFunktion}{<Funktion des Betreuers>}
+\newcommand{\BetreuerTelefon}{<Telefonnummer des Betreuers>}
+\newcommand{\BetreuerEmail}{<Mailadresse des Betreuers>}
+
+\newcommand{\DatumBeginn}{<DD.MM.JJJJ>}
+\newcommand{\DatumEnde}{<DD.MM.JJJJ>}
+\newcommand{\DatumAbgabe}{<DD.MM.JJJJ>}
+\end{lstlisting}
+
+
+
+\subsection{Achtung bei der ehrenwörtlichen Erklärung}
+
+Ich versichere hiermit, dass ich \textcolor{red}{\textbf{meine/n}} \Dokumentenart \ selbstständig verfasst, keine anderen als die angegebenen Quellen und Hilfsmittel benutzt, sowie nicht an anderer Stelle als Prüfungsarbeit vorgelegt habe.

@@ -1,0 +1,225 @@
+%	---------------------------------	%
+%		Layout Einstellungen				%
+%	---------------------------------	%
+
+% Umlaute unter UTF8 nutzen
+\usepackage[utf8]{inputenc}
+
+% deutsche Sonderzeichen und Silbentrennung
+\usepackage[ngerman]{babel, translator}
+
+%  Schriftart Times
+\usepackage{mathptmx}
+\usepackage[scaled=.90]{helvet}
+\usepackage{courier}
+
+% Zeichenencoding
+\usepackage[T1]{fontenc}
+\usepackage{fix-cm}
+
+
+% Paket für Seitenrandabstände und Einstellung für Seitenränder
+\usepackage{geometry}
+\geometry{
+	left=2.5cm,
+	right=2.5cm, 
+	top=2.5cm, 
+	bottom=3cm
+}
+
+% Paragraph styles
+\setlength{\parindent}{0cm}
+\setlength{\parskip}{6pt}
+
+% Schaltet den zusätzlichen Zwischenraum ab, den LaTeX normalerweise nach einem Satzzeichen einfügt.
+\frenchspacing
+
+% Gliederungstiefe einstellen
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{5}
+
+ 
+% Kopf- und Fußzeile %
+
+\usepackage{fancyhdr} %Paket laden
+\pagestyle{fancy} %eigener Seitenstil
+\fancyhf{} %alle Kopf- und Fußzeilenfelder bereinigen
+\fancyhead[L]{\nouppercase{\leftmark}} %Kopfzeile links
+\fancyhead[C]{} %zentrierte Kopfzeile
+\fancyhead[R]{} %Kopfzeile rechts
+\renewcommand{\headrulewidth}{0.5pt} %obere Trennlinie
+\fancyfoot[R]{\thepage} %Seitennummer
+\fancypagestyle{plain}{}
+%\renewcommand{\footrulewidth}{0.4pt} %untere Trennlinie
+
+% Abstand Kopf- und Fußzeile vom Rand
+\setlength{\headheight}{1.25cm}
+\setlength{\footskip}{1cm}
+
+% Abstand Text zur Kopfzeile
+\setlength{\headsep}{1cm}
+
+
+% bricht lange URLs "schoen" um
+\usepackage[hyphens,obeyspaces,spaces]{url}
+
+% erzeugt Inhaltsverzeichnis mit Querverweisen zu den Kapiteln (PDF Version)
+
+
+
+% Disable single lines at the start of a paragraph (Schusterjungen)
+\clubpenalty = 10000
+
+% Disable single lines at the end of a paragraph (Hurenkinder)
+\widowpenalty = 10000
+\displaywidowpenalty = 10000
+
+% zum Anzeigen des Seitenlayouts
+%\usepackage{showframe}
+
+
+%	---------------------------------	%
+%				Pakete					%
+%	---------------------------------	%
+
+\usepackage{graphicx}% Grafiken aus PNG Dateien einbinden
+\usepackage[onehalfspacing]{setspace}%-- Zeilenabstand 1,5
+\usepackage{colortbl}%Einfärben von Tabellen-Zellen, Zeilen, Spalten
+\usepackage{tocloft}% Abbildungs- und Tabellenbeschriftung ändern
+\usepackage{array}% für Tabellen
+\usepackage{multicol}% Paket für multirow Befehl (Tabellen)
+\usepackage{multirow}% Paket für multirow Befehl (Tabellen)
+\usepackage{longtable}% mehrseitige Tabellen ermöglichen
+\usepackage{floatflt}% floatende Bilder ermöglichen
+\usepackage{float}
+\usepackage{amsmath}% Mathematik Paket
+\usepackage{amssymb}% Mathematische Symbole importieren
+\usepackage{amsthm}
+\usepackage{amsbsy}
+\usepackage{textcomp}
+\usepackage{upgreek}
+\usepackage{wrapfig}
+\usepackage{subcaption}
+\usepackage{pdfpages}% einbinden von PDF-Dateien
+\usepackage{lastpage}
+\usepackage{caption}% Paket für Beschriftungen
+%\usepackage{ulem}% doppelt unterstreichen \uuline
+\usepackage[normalem]{ulem}% doppelt unterstreichen \uuline
+\usepackage{tabularx}
+\usepackage{lscape}
+\usepackage{xcolor}
+\usepackage{siunitx}% Paket für SI-Einheiten
+\usepackage[right]{eurosym}% Eurozeichen einbinden
+\usepackage{color}% Paket für Textfarben
+\usepackage{fancybox}% Paket für Boxen im Text
+\usepackage{setspace}% Paket für Zeilenabstand
+\usepackage{capt-of}% Bildbezeichner
+\usepackage[autostyle=true,german=quotes]{csquotes}% Paket für Anführungszeichen
+\sisetup{locale = DE}
+%\usepackage{hyperref}% Paket für Referenzen
+\usepackage[
+   colorlinks,        % Links ohne Umrandungen in zu wählender Farbe
+   linkcolor=black,   % Farbe interner Verweise
+   filecolor=black,   % Farbe externer Verweise
+   citecolor=black    % Farbe von Zitaten
+]{hyperref}
+\usepackage{makeidx}% Stichwortverzeichnis
+\usepackage{nomencl}% Symbolverzeichnis
+\makenomenclature
+
+%	---------------------------------	%
+%			Tabellen und Bilder			%
+%	---------------------------------	%
+
+% Rahmen in Textbreite um Objekte
+\floatstyle{boxed}
+\restylefloat{figure} % Abbildungen
+%\restylefloat{table} % Tabellen
+\restylefloat{listing} % Codebeispiele
+
+% Captions linksbündig orientieren
+\captionsetup{justification=raggedright,singlelinecheck=false}
+
+% Anpassungen Tabellenspalten
+% bei fester Ausrichtung Spaltenbreite vorgeben
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+% Anpassung der Tabellenspaltenhöhe
+\renewcommand{\arraystretch}{1.2}
+
+% Anpassen der captions
+\addto{\captionsngerman}{
+\renewcommand*{\figurename}{Abb.}
+\renewcommand*{\tablename}{Tab.}
+}
+
+% Anpassen der Nummerierung
+\numberwithin{equation}{section}
+
+% Tabellenfarben
+
+% Farbdefinitione
+%\definecolor{dunkelgrau}{rgb}{0.8,0.8,0.8}
+%\definecolor{hellgrau}{rgb}{0.95,0.95,0.95}
+
+%	---------------------------------	%
+%			 Codeverzeichnis				%
+%	---------------------------------	%
+
+\usepackage{listings}% Paket für Codebeispiele
+
+\lstset{
+language=Matlab,
+basicstyle=\small\ttfamily\color{black},
+commentstyle = \ttfamily\color{green},
+keywordstyle=\ttfamily\color{blue},
+stringstyle=\color{orange},
+backgroundcolor=\color{white},
+frame=single,
+showstringspaces=false,
+captionpos=b,
+}
+
+\makeatletter
+\begingroup\let\newcounter\@gobble\let\setcounter\@gobbletwo
+  \globaldefs\@ne \let\c@loldepth\@ne
+  \newlistof{listings}{lol}{\lstlistlistingname}
+\endgroup
+\let\l@lstlisting\l@listings
+\makeatother
+
+\setlength{\cftlistingsindent}{0cm}
+\renewcommand*{\cftlistingspresnum}{\lstlistingname~}
+\settowidth{\cftlistingsnumwidth}{\cftlistingspresnum}
+\addtolength{\cftlistingsnumwidth}{2cm}
+\renewcommand{\cftlistingsaftersnum}{:}
+
+% Anpassen der captions
+\addto{\captionsngerman}{
+\renewcommand*{\lstlistingname}{Code}
+}
+
+%	---------------------------------	%
+%		Glossar & Symbolverzeichnis		%
+%	---------------------------------	%
+
+% Symbolverzeichnis
+\newcommand{\nomunit}[1]{%
+\renewcommand{\nomentryend}{\hspace*{\fill}#1}}
+
+% Glossar
+\usepackage[toc,nonumberlist,acronyms,shortcuts,translate=babel]{glossaries}
+\renewcommand*{\glspostdescription}{}
+\makeglossaries
+\loadglsentries{Dateien/Verzeichnisse/Glossar.tex}
+
+
+
+%	---------------------------------	%
+%		Literaturverzeichnis				%
+%	---------------------------------	%
+
+% Erscheinungsbild
+\bibliographystyle{alphadin}
