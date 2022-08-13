@@ -102,186 +102,81 @@ Essentiell für den Erfolg des Projektes ist die Datenerfassung, Datenvorverarbe
 Die Wägezelle ist wie bereits beschrien mit einem Digital Analog Converter verbunden, dieser wird neben der Spannungsversorung über 3,3 V und Ground mit zwei digitalen Pins des Arduions verbunden, wobei einer der Pins zur Regelung des Taktes und die andere zur Signalübertragung genutzt wird. Z
 
 um Auslesen des Sensors wird die Bibliothek HX711.h verwendet. 
-Nach dem initialen tarieren der Waage mit einem bekannten Gewicht, was idealerweise 50\% des zulässigen Gesamtgewichts der Waage schwer ist, kann das aktuelle Gewicht mit nur einem Funktionsaufruf bestimmt werden. Um nicht 
+Nach dem initialen tarieren der Waage mit einem bekannten Gewicht, was idealerweise 50\% des zulässigen Gesamtgewichts der Waage schwer ist, kann das aktuelle Gewicht mit nur einem Funktionsaufruf bestimmt werden. Um nicht unnötig oft zu messen, die Anzeige nicht unnötig schnell zu aktualisieren und so den Nutzer gegebenenfalls zu verwirren, wird der Messvorgang nur einmal pro Sekunde ausgeführt und auf 1 Gramm gerundet.
 \subsubsection{BLE\label{Kap.:BLE}}
+
+Da sich bewusst für ein Controller mit eingebauter \ac{BLE}-Funktionalität entschieden wurde, wird diese Funktechnologie zur Datenübertragung an die mobilen Endgeräte verwendet. \ac{BLE} bietet hierbei die Vorteile eines einfachen Publish-Subscribe Mechanismus um von Base zum Client sich zu Verbinden und eine Übertragung so von der Waage nur dann zur Base aufzubauen, wenn diese einen neuen Wert gemessen hat. Außerdem liegt ein weiterer Vorteil von \ac{BLE} in der stromeffizienten Übertragung.
+
+Prinzipiell baut \ac{BLE} auf Services auf, welche wiederum Charakteristiken mit Übertragungsformaten haben. Für die smarte Küchenwaage ist prinzipiell nur das Abfragen und Subscriben auf einen Wert nötig, den des gemessenen Gewichts. Beim Verbindungsaufbau mit dem Board wird eine eigene Schleife aufgerufen, welche solange aktiv ist, wie die Bluetooth Verbindung besteht, so kann sich bei einmaligem Einschalten der Waage jederzeit ein Smartphone verbinden und trennen von der Waage. 
+
 \subsubsection{Segmentdisplay}
+Das Segmentdisplay wird durch Multiplexing angesteuert,  So wird für die 4 Nummern, bestehend aus 7 Segmenten nur 12 Pins benötigt, welche sich auf 4 Nummern-Pins und 8 Segment Pins zusammensetzen. 
+Das Aufrufen und Updaten des Displays muss für eine kontinuierliche Anzeige der Werte stets innerhalb der normalen Schleife und innerhalb des \ac{BLE}-Loops geschehen, da andernfalls die Anzeige dunkel bleibt und kein Wert angezeigt wird. 
+
 \subsection{App}
+
+Zur Erweiterung der normalen Wägefunktionen muss eine Schnittstelle geschaffen werden, welche es erlaubt anhand des gemessen Wertes weitere Interaktionen auszuführen, da zur Datenübertragung BLE genutzt wird, muss das Endgerät auf dem die Schnitttstelle laufen soll \ac{BLE} ebenfalls unterstützen. Die meisten modernen Smartphones und Tablets tun dies. 
+Aus diesem Grund wird eine App entwickelt, welche auf den Plattformen iOS und Android lauffähig seien soll, hierzu werden im Folgenden verschiedene Entwicklungsmöglichkeiten betrachtet zur Programmierung von Apps betrachtet 
 \subsubsection{Framework}
-\subsubsection{BLE}
-\subsubsection{Frontend}
-\section{Zusammenfassung und Ausblick \label{Kap.:Zusammenfassung}}
-\subsection{Reflexion}% (Takt-, BLE-, … Probleme)
-\subsection{Ausblick} %(bessere Teller für die Waage, smartes Kochbuch, Foodtacker, Social Funktionen, …)
-
-\section{Einführung}
-
-Bei diesem Dokument handelt es sich um eine \LaTeX\ Vorlage für wissenschaftliche Arbeiten in der \ac{FEIF}. Es handelt sich hierbei nicht um eine Anleitung wie \LaTeX\ funktioniert, sondern rein um eine Vorlage die den formalen Richtlinien der \ac{FEIF} entspricht.
-
-Es werden lediglich Hinweise und Tipps für das Arbeiten mit \LaTeX\ gegeben, so dass das arbeiten mit dieser Vorlage erleichtert wird. Anleitungen und Tutorials wie \LaTeX\ grundsätzlich funktioniert und die Syntax aufgebaut sind zu genüge im Internet vorhanden.
-
-Eine gute Quelle hierfür ist die Dokumentation von \enquote{Overleaf} \footnote{\url{https://www.overleaf.com/learn}} oder das \enquote{Kochbuch für \LaTeX} \footnote{\url{https://archiv.dante.de/TeX-Service/TSP/tex/cookbook/cookbook.html}}. Eine weitere Hilfestellung ist es, die \LaTeX\ Datei dieses Dokuments zu öffnen um die verwendeten Syntax für die Erstellung zu sehen. Diese steckt voller nützlicher Beispiele wie mit dieser Vorlage Effizient gearbeitet werden kann.
-
-\section{Entwicklungsumgebung}
-
-Zunächst lohnt es sich, eine passende \ac{IDE} zu wählen. Hier gilt es, sich zwischen einer Online oder Offline Entwicklungsumgebung zu entscheiden.
-
-\subsection{Online Entwicklungsumgebung}
-
-Soll eine Online \ac{IDE} gewählt werden so empfiehlt sich die Verwendung von \enquote{Overleaf} \footnote{\url{https://www.overleaf.com}}. Diese läuft rein browserbasiert und ermöglicht das gemeinsame Arbeiten an einem Dokument. Um es zu nutzen muss man sich lediglich mit einer E-Mail-Adresse anmelden.
-
-\subsection{Offline Entwicklungsumgebung}
-
-Bei einer Offline \ac{IDE} handelt es sich um ein Programm, was auf dem Rechner installiert werden muss. Auch für die Installation von \LaTeX\ gibt es im Internet viele Anleitungen. Eine Programmempfehlung wäre das kostenfreie Programm \enquote{TEXMAKER} \footnote{\url{https://www.xm1math.net/texmaker/}}. Hierbei handelt es sich um eine Entwicklungsumgebung, die unter den Betriebssystemen Linux, MacOS und Windows funktioniert. Sie ist flexibel nach den eigenen Wünschen anpassbar, bietet eine Vielzahl von Assistenzfunktionen, eine gute Syntax-Highlighting Funktion und eine integrierte Dokumentenvorschau.
-
-Natürlich können auch andere Programme verwendet werden, auch hier führt eine Internetrecherche zu vielen Ergebnissen.
-
-\section{Funktionalitäten}
-
-In diesem Kapitel wird auf die Funktionalitäten dieser Vorlage eingegangen. Vielen erscheint \LaTeX\ Anfangs sehr kompliziert, da es sich dabei um eine Skriptsprache handelt, die nicht wie klassische Textverarbeitungsprogramme auf das \enquote{\ac{WYSIWYG}} Prinzip setzt. So wird hier der Inhalt und die Formatierung erst nach dem übersetzten des Codes sichtbar. Dies erscheint für viele auf den ersten Blick ein Nachteil und Behinderung zu sein, jedoch ist das Gegenteil der Fall. Im Folgenden wird auf nützliche Funktionalitäten eingegangen, die einem nicht jedes Textverarbeitungsprogramm zur Verfügung stellt.
-
-Im folgenden werden die Funktionalitäten beschrieben, jedoch auch hier der Hinweis: Es gibt keine expliziten Codebeispiele im Text, die verwendeten \LaTeX\-Befehle sind nur im Quellcode zu sehen.
-
-\subsection{Verzeichnisse}
-
-Einer der größten Vorteile ist es, dass Verzeichnisse automatisch erstellt werden. Grundvoraussetzung ist hierbei lediglich, dass die richtigen Befehle an den entsprechenden Stellen verwendet werden.
-
-\subsubsection{Inhalt}
-
-Das Inhaltsverzeichnis wird durch die Verwendung von Überschriften im Text automatisch erstellt. Wird eine neue Überschrift hinzugefügt, taucht diese an der entsprechenden Stelle im Inhaltsverzeichnis auf. Wird eine Überschrift gelöscht, so wird sie auch aus dem Inhaltsverzeichnis entfernt.
-
-Die Gliederungstiefe in diesem Dokument ist dreistufig:
-
-\begin{enumerate}
-	\item Überschrift 1 (section)
-	\begin{enumerate}
-		\item Überschrift 1.1 (subsection)
-		\begin{enumerate}
-			\item Überschrift 1.1.1 (subsubsection)
-		\end{enumerate}
-	\end{enumerate}
-\end{enumerate}
-
-\subsection{Abbildungen}
-
-Auch das Abbildungsverzeichnis wird automatisch erstellt, hierzu muss eine Abbildung mit entsprechender Syntax eingebunden werden. In diesem Beispiel haben wir in Abbildung \ref{fig: Logo der Hochschule Coburg} das Logo der Hochschule Coburg als Bild eingebunden. Ebenfalls wird die Position des Bildes und dessen Größe fest vorgegeben. 
-
-\begin{figure}[hp]
-	\centering
-	\includegraphics[width=1\textwidth]{Bilder/Titelseite/Logo_HS_Coburg}
-	\caption{Logo der Hochschule Coburg}
-	\label{fig: Logo der Hochschule Coburg}
-\end{figure}
-
-In Abbildung \ref{fig: Logo der Hochschule Coburg - kleiner dargestellt} ist das identische Bild aus Abbildung \ref{fig: Logo der Hochschule Coburg} dargestellt, lediglich verkleinert. Durch den \enquote{captiion} Befehl tauchen beide Abbildungen im Abbildungsverzeichnis mit entsprechendem Verweis auf die Seite im Dokument automatisch auf.
-
-\begin{figure}[hp]
-	\centering
-	\includegraphics[width=0.5\textwidth]{Bilder/Titelseite/Logo_HS_Coburg}
-	\caption{Logo der Hochschule Coburg - kleiner dargestellt}
-	\label{fig: Logo der Hochschule Coburg - kleiner dargestellt}
-\end{figure}
-
-\newpage
-
-\subsection{Tabellen}
-
-Tabellen mit \LaTeX\ zu erstellen ist zugegebenermaßen etwas umständlich, jedoch stellen viele Programme Assistenzfunktionen für das erstellen zur Verfügung. Wurde das Arbeiten mit Tabellen in \LaTeX\ verstanden, so stellt dies kein Problem mehr dar. Tabellen wie Tabelle \ref{tab: Beipsieltabelle} können so mit Leichtigkeit erstellt werden. Auch diese Tabelle taucht automatisch im Tabellenverzeichnis auf.
-
-\begin{table}[hp]
-	\begin{tabular}{| L{3cm} | l | l |}
-	\hline
-	\rowcolor{lightgray}
-	Kopfzeile 1 mit fester Breite & Kopfzeile 2 mit dynamischer Breite & Kopfzeile 3 (dynamisch)\\
-	\hline
-	In dieser Tabellenzeile entsteht ein automatischer Zeilenumbruch wenn der Rand überschritten wird. & Hier nicht, sie wird dynamisch erweitert. & \cellcolor{blue} Ich bin blau.\\
-	\hline
-	Achtung, unter meiner Zelle fehlt die horizontale Trennlinie & \multicolumn{2}{r}{Zellenverbindung, rechtsbündig, ohne rechten vertikalen Rand}\\
-	\cline{2-3}
-	\multicolumn{3}{| c |}{Tabellenende}\\
-	\hline
-	\end{tabular}
-\caption{Beispieltabelle}
-\label{tab: Beipsieltabelle}
-\end{table}
-
-\subsection{Code}
-
-Oft git es in der Elektrotechnik und Informatik Code zu dokumentieren. Auch hier bietet \LaTeX\ gute Möglichkeit. Es werden nahezu alle Programmiersprachen unterstützt, ebenfalls ist ein angepasstes Syntax-Highlighting möglich. Im Codebeispiel \ref{code: Beispielcode} ist eine for-Schleife in MATLAB realisiert. Auch dieses Beispiel taucht automatisch im Codebeispielverzeichnis auf.
-
-\begin{lstlisting}[caption={Beispielcode MATLAB}, label=code: Beispielcode]
-for v = 1.0:-0.2:0.0
-   disp(v)
-end
-\end{lstlisting}
-
-\subsection{Symbole}
-
-Das Symbolverzeichnis dient der Darstellung von Symbolen, welche in Formeln verwendet werden. Hier ist darauf zu achten, dass die Symbole in der .tex-Datei \enquote{Symbolverzeichnis.tex} im Ordner \enquote{Dateien/Verzeichnisse/} eingetragen werden. Die dort eingetragenen Symbole werden automatisch alphabetisch geordnet und aufgelistet.
-
-Auch hier wieder ein Beispiel:
-
-\begin{equation}
-	\overline{x} = \frac{1}{n} \sum_{i=1}^n x_i
-\end{equation}
-
-\begin{equation}\label{term: Formel}
-	s = \sqrt{\frac{1}{n - 1} \sum_{i=1}^n (x_i - \overline{x})}
-\end{equation}
-
-Hier werden die Formeln automatisch nummeriert, ebenfalls kann auf diese Nummerierung eine Referenzierung erfolgen (siehe Formel \ref{term: Formel}).
-
-\subsection{Abkürzungsverzeichnis}
-
-Abkürzungen wurden schon im Laufe des Dokumentes verwendet. Auch hier gilt die Abkürzungen in der Datei \enquote{Abkuerzungsverzeichnis.tex} im Order \enquote{Dateien/Verzeichnisse/} auszufüllen. Das Verzeichnis wird automatisch erstellt und alphabetisch geordnet ausgegeben. Bei erstmaliger Verwendung wird die Abkürzung automatisch ausgeschrieben und steht dahinter in Klammern. Allerdings gibt es verschiedene Möglichkeiten, Abkürzungen auszugeben.
-
+Zur Entwicklung von Apps existieren vier Möglichkeiten 
 \begin{itemize}
-	\item acs: \acs{EBA}
-	\begin{itemize}
-		\item Auch wenn die Abkürzung neu ist gibt dieser Befehl nur die Abkürzung aus.
-	\end{itemize}
-	\item ac: \ac{EBA}
-	\item acl: \acl{EBA}
-	\begin{itemize}
-		\item Hier wird eine vollständige Ausgabe der Abkürzung erzwungen.
-	\end{itemize}
+	\item Native Entwicklung
+	\item native Cross Plattform Entwicklung
+	\item Hybride Entwicklung 
+	\item Progressive Web Apps
 \end{itemize}
 
-\subsection{Glossar}
+Bei der nativen Entwicklung werden für iOS und Android jeweils eine eigene Codebase verwendet, es muss also für beide Betriebssysteme eine eigenen App entwickelt werden.
 
-Auch für die Erstellung des \gls{Glossar}s gibt es eine einfache Möglichkeit. Die Begriffe, welche im \gls{Glossar} auftauchen sollen müssen in der Datei \enquote{Glossar.tex} im Ordner \enquote{Dateien/Verzeichnisse/} eingetragen werden. Dort eingetragene Begriffe können mit den entsprechenden Befehlen im Text aufgeführt werden. Wurden Begriffe in der Glossar Datei angelegt, allerdings nicht im Dokument verwendet, erscheinen diese bei der Ausgabe nicht im \gls{Glossar}s. Die Ausgabe des \gls{Glossar} erfolgt alphabetisch geordnet.
+Native Cross Platform Apps setzen auf eine zwischengeschaltete Programmiersprache, um mithilfe eines Frameworks wie Xamarin native Anwendungen zu erzeugen. Somit kann ein Großteil der Codebase werden um native Apps zu generieren, Nachteile ergeben sich jedoch innerhalb des Userinterfaces, welches vollständig durch ein eigenes Rendering des Frameworks überschrieben wird.
 
-\underline{\textbf{Hinweis}}
+Hybride Apps sind in Webanwendungen, welche mittels eines Frameworks in einem nativen Container für die Zielplattform überführt werden, dadurch können hybride Apps auf native APIs der Zielplattform zugreifen
 
-Für das erstellen des Glossars kann es notwendig sein, den Befehl \enquote{makeglossaries} auszuführen.
+Progressive Web Apps ähnlen stark hybriden Apps, jedoch werden diese in einer Browserumgebung ausgeführt und klönnen dennoch offline genutzt werden.
 
-\subsection{Literatuverzeichnis}
+Anhand der dargestellten Merkmale wird sich für das Einsetzen von einem hybriden Entwicklungsanstaz entschieden, da dieser gut auf die Hardware des Gerätes, also das Bluetooth-Modul,zugreifen kann und direkt iOS, Android und eine Web-Browser Version unterstützt werden können. 
 
-Das Literaturverzeichnis wird mit Hilfe von BibTex erstellt. Hierzu muss die verwendete Literatur in der Datei \enquote{Literatur.bib} im Ordern \enquote{Literatur/} eingetragen werden.
+Auf Grund erster Erfahrung in Angular wird das Framework Ionic verwendet. Unter Zuhilfenahme von Capacitor und Android Studio kann so eine Android App entwickelt werden. 
+ 
+\subsubsection{BLE}
 
-Hier noch Beispiele für das Zitieren mit \LaTeX\ :
+Capacitor wird mithilfe eines Community-Plugins um eine \ac{BLE}-Schnittstelle erweitert. Diese Schnittstelle ermöglicht das erkunden nach neuen BLE-Geräten mit spezifischen Eigenschaften, spo kann in der Anwendung nutzerfreunlich nur die eigene \ac{BLE}-fähige Waage angezeigt werden. Wird sich mit der Waage nun verbunden, so wird an die App mithilfe der festgelegten \ac{BLE}-Service Charakteristik der aktuelle Messwert an die Mobile-App übertragen. dieser kann anschließen zur weiteren Berechnung verwendete und ausgegeben werden.
 
-\enquote{The engineers started trying to understand how heat would dissipate and current flow would behave across seventy batteries by supergluing them together into groups called bricks.} \cite[S. 158]{Vance2016}
+\subsubsection{Mobile App}
 
-Eine Faltung zweier Funktionen im Zeitbereich gestaltet sich als kompliziert, eine Vereinfachung bringt es, die Funktionen in den Laplace-Bildbereich zu überführen. Die Faltung im Zeitbereich entspricht einer Multiplikation im Bildbereich. \cite[S. 339f]{Papula2006}
+Die Frontendentwicjlung gestaltet sich ähnlich der, einer Angular Anwendung. verschiedene Module sind unterschiedlichen Routen zugeordnet, welche über ein Hauptfenster bedinet werden können. Ionic bringt verschiedene erste Layouts mit, in der Anwendung wird sich für ein Tabs Moidul entschieden, welches am unteren Seitenrand mehrere Tabs zur Hauptnavigation hat. Innerhalb des ersten Tabs ist eine normale Waagenfunktionalität nachgenbaut, hier wird lediglich das Gewicht angezeigt. Über die anderen Tabs können anschließenden Iterationen weitere Funktionalitäten liefern. 
 
+\section{Zusammenfassung und Ausblick \label{Kap.:Zusammenfassung}}
 
-
-
-
-
-
-
+Mit der ersten Implementierung einer smarten Küchenwaage konnten einige Ziele erreicht werden, jedoch bietet die Küchenwaage noch keine zusätzlichen smarten Features, der aktuelle Entwicklungsstand wird im Folgendem diskutiert und mögliche Erweiterungen dargestellt.
 
 
+\subsection{Reflexion}% (Takt-, BLE-, … Probleme)
 
+In der ersten Implementierungsiteration konnte erfolgreich ein erster Prototyp einer smarten Küchenwaage aufgebaut werden. Hierfür wurde sich an bestehen Lösung der Wägetechnik, energiesparsamen Kommunikation und zeitgemäßer App Entwicklung bedient. 
 
+Dennoch ist der erste Prototyp nicht perfekt, durch die hohen Anforderungen von Bluetooth, dem zyklischem Messen der Waage und dem aktualisieren des Segmentdisplays scheint der Controller teilweise überlastet, was sich durch ein sichtbares Flimmern am Segmentdisplay ableiten lässt. 
 
+Die verwendeten Elektronikkomponenten liegen zum aktuellen Zeitpunkt noch frei und sind nicht in einem Gehäuse verbaut. 
 
+Mit dem Fehlen einer Nullungs-Funktion am Controller selbst fehlt eine typische Funktion einer handelsüblichen Küchenwaage, so kann das Tarrieren nur bei Systemstart vollzogen werden. 
 
+Da während des zeitlich limitierten Entwicklungsprozesses die Funktionalität der Waage im Vordergrund stand, benötigt diese noch eine feste Stromquelle, das einplanen und einbauen von Batterien oder wenigstens eines Akkus sollte in künftigen ENticklungsprozsses berücksichtigt werden.
 
+\subsection{Ausblick} %(bessere Teller für die Waage, smartes Kochbuch, Foodtacker, Social Funktionen, …)
 
+Wie bereits zuvor beschrieben, hat der Prototyp ein hohes Potential bezüglich weiterer Entwicklungen. Nachfolgend werden einige Gedanken dargestellt.
 
+\textbf{Physische Erweiterungen}
 
+Die smarte Küchenwaage sollte in späteren Entwicklungsstufen ohne externe Stromquelle und in dem üblichen Umfeld arbeiten können. Hierfür ist es notwendig die Waage mit einer Stromquelle auszustatten und das Gehäuse der Waage so anzupassen, dass dieses zumindest gegen Spritzwasser geschützt ist. Eine Lösung für das Display, der Ladefunktion und eine Nullungsfuktion muss noch erarbeitet werden. 
 
+\textbf{Softwareerweiterungen}
 
+Wie schon oft in dieser Ausarbeitung angesprochen, liegt das größte Potential der Waage innerhalb der Software. 
 
+So ist es denkbar, ein smartes Kochbuch zu implementieren, welches den Nutzer durch den gesamten Zubereitungsprozess leitet. Für das Hinzufügen von Zutaten kann die Softwar die benötigte Zutat und die noch benötigte Menge berechnen und diese auf dem Smartphone ausgeben. Sollte der Nutzer den Zielwert stark überschreiten, kann die Anwendung vorschlagen die Menge der anderen Zutaten anzupassen oder Teile der Zutat vom Nutzer entnehmen lassen. 
+
+Ebenfalls kann die Waage zum Tracken der Ernährung helfen, so kann eine Datenbank an die App angebunden werden, über welche sich Nährwerte berechnet werden können und ein digitales Tage-Kochbuch geführt werden kann.
+ 
+ Das zuvor beschrieben Kochbuch kann auch von den Nutzern bearbeitet und erweitert werden. So kann der Nutzer beispielsweise neue Gerichte für sich lokal anlegen, diese exportieren und mit Freunden teilen, mögliche social Funktionen sind auch denkbar, so kann dies womöglich direkt in der App selbst geschehen.
